@@ -1,0 +1,188 @@
+import React, { useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const AgentDashboard = () => {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    navigate("/", { replace: true });
+  };
+
+  const closeIfMobile = () => setOpen(false);
+
+  return (
+    <div className="container-fluid py-3">
+      {/* Welcome card */}
+      <div
+        style={{
+          background: "#fff",
+          padding: "15px",
+          marginBottom: "15px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+        }}
+      >
+        <h4 style={{ marginBottom: "5px" }}>Welcome, Rental Agent 👋</h4>
+        <div style={{ color: "#6c757d" }}>
+          Use the sidebar to manage Cars, Bookings, Payments, and Documents.
+        </div>
+      </div>
+
+      {/* Shell wrapper */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row-reverse", // <-- FLIP sidebar to right
+          minHeight: "80vh",
+        }}
+      >
+        {/* Sidebar */}
+        <aside
+          style={{
+            width: "240px",
+            background: "#343a40",
+            color: "#fff",
+            padding: "20px",
+            display: open ? "block" : "block",
+          }}
+        >
+          <div style={{ marginBottom: "20px" }}>
+            <div
+              style={{
+                width: "40px",
+                height: "40px",
+                background: "#ffc107",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              SP
+            </div>
+            <div>
+              <strong>SpeedUp</strong>
+              <br />
+              <span style={{ fontSize: "13px", color: "#adb5bd" }}>Admin</span>
+            </div>
+          </div>
+
+          <nav style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <NavLink
+              to="/agent/booking"
+              style={({ isActive }) => ({
+                color: isActive ? "#ffc107" : "#fff",
+                textDecoration: "none",
+              })}
+              onClick={closeIfMobile}
+            >
+              📖 Manage Bookings
+            </NavLink>
+
+            <NavLink
+              to="/agent/payment"
+              style={({ isActive }) => ({
+                color: isActive ? "#ffc107" : "#fff",
+                textDecoration: "none",
+              })}
+              onClick={closeIfMobile}
+            >
+              💰 Manage Payments
+            </NavLink>
+
+            <NavLink
+              to="/agent/document"
+              style={({ isActive }) => ({
+                color: isActive ? "#ffc107" : "#fff",
+                textDecoration: "none",
+              })}
+              onClick={closeIfMobile}
+            >
+              📄 Manage Documents
+            </NavLink>
+
+            <NavLink
+              to="/agent/car"
+              style={({ isActive }) => ({
+                color: isActive ? "#ffc107" : "#fff",
+                textDecoration: "none",
+              })}
+              onClick={closeIfMobile}
+            >
+              🚗 Manage Cars
+            </NavLink>
+          </nav>
+
+          <button
+            onClick={handleLogout}
+            style={{
+              marginTop: "20px",
+              background: "transparent",
+              border: "1px solid #ffc107",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              color: "#ffc107",
+              cursor: "pointer",
+            }}
+          >
+            Logout
+          </button>
+        </aside>
+
+        {/* Main Content (LEFT side now) */}
+        <main style={{ flex: 1, padding: "20px" }}>
+          {/* Topbar */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+              borderBottom: "1px solid #ddd",
+              paddingBottom: "10px",
+            }}
+          >
+            <button
+              onClick={() => setOpen((s) => !s)}
+              aria-label="Toggle sidebar"
+              style={{
+                marginRight: "15px",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              ☰
+            </button>
+            <h1 style={{ fontSize: "20px", margin: 0 }}>Admin</h1>
+            <div style={{ flex: 1 }} />
+            <button
+              onClick={handleLogout}
+              style={{
+                display: "inline-block",
+                background: "#dc3545",
+                color: "#fff",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "6px",
+              }}
+            >
+              Logout
+            </button>
+          </div>
+
+          {/* Routed content */}
+          <div>
+            <Outlet /> {/* Now this shows on the LEFT side */}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default AgentDashboard;
